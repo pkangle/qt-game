@@ -25,10 +25,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        widget.cpp
+        widget.cpp \
+    form.cpp \
+    form1.cpp \
+    form2.cpp \
+    form3.cpp
 
 HEADERS += \
-        widget.h
+        widget.h \
+    form.h \
+    form1.h \
+    form2.h \
+    form3.h
 
 FORMS += \
-        widget.ui
+        widget.ui \
+    form.ui \
+    form1.ui \
+    form2.ui \
+    form3.ui
+
+RESOURCES += \
+    img.qrc

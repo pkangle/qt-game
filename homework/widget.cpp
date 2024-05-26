@@ -12,3 +12,9 @@ Widget::~Widget()
 {
     delete ui;
 }
+
+void Widget::on_startBtn_clicked()
+{
+    Form *new_window = new Form;
+    new_window->show();
+}
