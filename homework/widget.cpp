@@ -6,6 +6,7 @@ Widget::Widget(QWidget *parent) :
     ui(new Ui::Widget)
 {
     ui->setupUi(this);
+    ui->gamename->setStyleSheet("background-color: rgba(0, 0, 0, 0);");
 }
 
 Widget::~Widget()
