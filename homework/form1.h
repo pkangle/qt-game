@@ -7,6 +7,7 @@
 #include<QVector>
 #include<QStack>
 #include<QPoint>
+#include<QKeyEvent>
 
 namespace Ui {
 class Form1;
@@ -22,7 +23,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-
+    void keyPressEvent(QKeyEvent *event) override;
 private slots:
     void moveObject();
 
@@ -41,6 +42,11 @@ private:
     void setupRoute(const QVector<QPoint> &solutionRoute);
     void drawObject(QPainter &painter);
     void drawMaze(QPainter &painter);
+
+    QPoint studentPosition; // 对象位置
+
+    void moveStudent(int dx, int dy);
+    bool isValidPosition(const QPoint &pos);
 };
 
 #endif // FORM1_H

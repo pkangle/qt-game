@@ -8,7 +8,8 @@ Form1::Form1(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Form1),
     currentPosition(0),
-    moveSpeed(100) // 设置移动速度，单位为毫秒
+    moveSpeed(100),
+    studentPosition(1,0)
 {
     ui->setupUi(this);
     QFont font;
@@ -20,6 +21,7 @@ Form1::Form1(QWidget *parent) :
 
     // 获取对象路线
     getObjectRoute();
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 Form1::~Form1()
@@ -38,6 +40,12 @@ void Form1::paintEvent(QPaintEvent *event)
     drawMaze(painter);
     drawObject(painter);
     int mazeData[20][20];
+    //绘制操控对象
+    QFont font3;
+    font3.setPixelSize(10);
+    painter.setFont(font3);
+    painter.drawText(studentPosition.x() *cellSize, studentPosition.y() *cellSize, cellSize, cellSize, Qt::AlignCenter, "分工");
+
 }
 
 void Form1::getObjectRoute()
@@ -85,7 +93,7 @@ void Form1::drawMaze(QPainter &painter)
         for (int x = 0; x < N; ++x) {
             QRect rect(x * cellSize, y * cellSize, cellSize, cellSize);
             if (mazeData[y][x] == 0) {
-                painter.drawText(x * cellSize, y * cellSize, cellSize, cellSize, Qt::AlignCenter, "墙");painter.drawText(rect,"墙");
+                painter.drawText(x * cellSize, y * cellSize, cellSize, cellSize, Qt::AlignCenter, "墙");
 
             } else {
                 painter.fillRect(rect, Qt::white);
@@ -107,8 +115,11 @@ void Form1::drawObject(QPainter &painter)
     if (currentPosition >= route.size()) return;
     painter.setPen(Qt::blue);
     QPoint pos = route[currentPosition];
-    QRect rect(pos.x() * cellSize, pos.y() * cellSize, cellSize, cellSize);
-    painter.drawEllipse(rect);  // 使用 drawEllipse 方法绘制对象
+   // QRect rect(pos.x() *cellSize, pos.y() *cellSize, cellSize, cellSize);
+    QFont font3;
+    font3.setPixelSize(10);
+    painter.setFont(font3);
+    painter.drawText(pos.x() *cellSize, pos.y() *cellSize, cellSize, cellSize, Qt::AlignCenter, "组员");
     currentPosition++;
 }
 
@@ -120,4 +131,40 @@ void Form1::moveObject()
         moveTimer->stop(); // 路线走完，停止定时器
     }
     update();
+}
+
+void Form1::keyPressEvent(QKeyEvent *event)
+{
+    int step = 1;
+    switch (event->key()) {
+    case Qt::Key_Up:
+        moveStudent(0, -step);
+        break;
+    case Qt::Key_Down:
+        moveStudent(0, step);
+        break;
+    case Qt::Key_Left:
+        moveStudent(-step, 0);
+        break;
+    case Qt::Key_Right:
+        moveStudent(step, 0);
+        break;
+    default:
+        QWidget::keyPressEvent(event);
+    }
+}
+
+void Form1::moveStudent(int dx, int dy)
+{
+    QPoint newPos = studentPosition + QPoint(dx, dy);
+    if (isValidPosition(newPos)) {
+        studentPosition = newPos;
+        update();
+    }
+}
+
+bool Form1::isValidPosition(const QPoint &pos)
+{
+    if(mazeData[pos.x()][pos.y()] == 1) return true;
+    else return false;
 }
