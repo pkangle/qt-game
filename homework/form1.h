@@ -24,6 +24,31 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
+   // void keyReleaseEvent(QKeyEvent *event) override;
+    int mazeData[20][20] = {
+        {0,1,0,1,1,1,0,0,0,1,1,1,1,0,0,0,1,1,1,0},
+        {0,1,0,1,0,1,0,1,1,0,1,0,1,0,0,0,1,0,1,0},
+        {0,1,0,1,0,1,0,1,0,1,1,0,1,0,0,0,1,0,1,0},
+        {0,1,0,1,0,1,0,1,0,1,1,0,1,0,0,1,1,0,1,0},
+        {0,1,0,1,0,1,1,1,0,1,0,0,1,1,0,1,0,0,1,1},
+        {0,1,0,1,0,0,0,1,0,1,1,1,0,1,0,1,0,0,0,1},
+        {0,1,0,1,1,1,0,1,0,0,0,1,0,1,0,1,1,0,1,1},
+        {0,1,0,0,0,1,0,1,1,1,0,1,0,1,0,0,1,1,0,1},
+        {0,1,1,1,0,1,0,0,0,1,0,1,0,1,1,0,0,1,0,1},
+        {0,0,0,1,0,1,0,1,1,1,0,1,0,0,1,0,1,1,0,1},
+        {0,1,1,1,0,1,0,1,0,0,0,1,0,1,1,0,1,0,0,1},
+        {0,1,0,0,0,1,0,1,0,0,1,1,0,1,0,1,1,0,1,1},
+        {0,1,0,0,1,1,0,1,1,0,1,0,0,1,0,1,0,0,1,0},
+        {0,1,0,0,1,0,0,0,1,0,1,0,1,1,0,1,0,1,1,0},
+        {0,1,0,0,1,1,1,0,1,0,1,0,1,0,0,1,0,1,0,0},
+        {0,1,1,0,0,0,1,0,1,0,1,0,1,1,0,1,0,1,1,0},
+        {0,0,1,0,1,1,1,0,1,0,1,0,0,1,0,1,0,0,1,0},
+        {0,0,1,0,1,0,0,0,1,0,1,0,1,1,0,1,0,0,1,0},
+        {0,0,1,0,1,0,0,0,1,0,1,0,1,0,0,1,0,0,1,0},
+        {0,0,1,1,1,0,0,0,1,1,1,0,1,1,1,1,0,0,1,0}
+    };
+
+
 private slots:
     void moveObject();
 
@@ -32,7 +57,7 @@ private:
     QTimer *moveTimer;
 
     static const int N = 20; // 迷宫大小
-    int mazeData[N][N];
+   // int mazeData[N][N];
     int cellSize = 20;
     QVector<QPoint> route; // 对象路线
     int currentPosition; // 当前位置索引
@@ -42,11 +67,14 @@ private:
     void setupRoute(const QVector<QPoint> &solutionRoute);
     void drawObject(QPainter &painter);
     void drawMaze(QPainter &painter);
-
+    QVector<QVector<bool>> visited;
     QPoint studentPosition; // 对象位置
-
+    void drawStudent(QPainter &painter);
     void moveStudent(int dx, int dy);
     bool isValidPosition(const QPoint &pos);
+
+    int moveDx;
+    int moveDy;
 };
 
 #endif // FORM1_H
