@@ -76,7 +76,9 @@ private:
     QPoint currentDirection;
     void drawStudent(QPainter &painter);
     bool isValidPosition(const QPoint &pos);
-
+    bool trailEnabled;
+    QVector<QPoint> trail;
+    void clearTrail();
     int moveDx;
     int moveDy;
 };
