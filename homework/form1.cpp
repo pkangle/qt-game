@@ -11,6 +11,7 @@ Form1::Form1(QWidget *parent) :
     ui(new Ui::Form1),
     currentPosition(0),
     moveSpeed(100),
+    StudentSpeed(100),
     visited(N, QVector<bool>(N, false)),
     studentPosition(1,0)
 {
@@ -21,6 +22,10 @@ Form1::Form1(QWidget *parent) :
     moveTimer = new QTimer(this);
     connect(moveTimer, &QTimer::timeout, this, &Form1::moveObject);
     moveTimer->start(moveSpeed);
+
+    //操作对象计时器
+    StudentTimer = new QTimer(this);
+    connect(StudentTimer,&QTimer::timeout, this, &Form1::moveStudent);
 
     // 获取对象路线
     getObjectRoute();
@@ -100,7 +105,6 @@ void Form1::drawObject(QPainter &painter)
     if (currentPosition >= route.size()) return;
     painter.setPen(Qt::blue);
     QPoint pos = route[currentPosition];
-   // QRect rect(pos.x() *cellSize, pos.y() *cellSize, cellSize, cellSize);
     QFont font3;
     font3.setPixelSize(10);
     painter.setFont(font3);
@@ -111,7 +115,6 @@ void Form1::drawObject(QPainter &painter)
 
 void Form1::moveObject()
 {
-    //++currentPosition; // 更新当前位置
     if (currentPosition >= route.size()) {
         moveTimer->stop(); // 路线走完，停止定时器
     }
@@ -123,31 +126,43 @@ void Form1::keyPressEvent(QKeyEvent *event)
     int step = 1;
     switch (event->key()) {
     case Qt::Key_Up:
-        moveStudent(0, -step);
+        currentDirection = QPoint(0, -step);
+        StudentTimer->start();
         break;
     case Qt::Key_Down:
-        moveStudent(0, step);
+        currentDirection = QPoint(0, step);
+        StudentTimer->start();
         break;
     case Qt::Key_Left:
-        moveStudent(-step, 0);
+        currentDirection = QPoint(-step, 0);
+        StudentTimer->start();
         break;
     case Qt::Key_Right:
-        moveStudent(step, 0);
+        currentDirection = QPoint(step, 0);
+        StudentTimer->start();
         break;
     default:
         QWidget::keyPressEvent(event);
     }
 }
 
-void Form1::moveStudent(int dx, int dy)
+void Form1::keyReleaseEvent(QKeyEvent *event)
 {
-    QPoint newPos = studentPosition + QPoint(dx, dy);
+    Q_UNUSED(event);
+    StudentTimer->stop(); // 停止键盘计时器
+}
+
+
+void Form1::moveStudent()
+{
+    QPoint newPos = studentPosition + currentDirection;
     if (isValidPosition(newPos)) {
         studentPosition = newPos;
         update();
+    } else {
+        StudentTimer->stop(); // 如果碰到墙停止定时器
     }
 }
-
 bool Form1::isValidPosition(const QPoint &pos)
 {
 
