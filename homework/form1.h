@@ -51,8 +51,6 @@ protected:
 
 private slots:
     void moveObject();
-    void moveStudent();
-
 
 private:
     Ui::Form1 *ui;
@@ -74,13 +72,13 @@ private:
     QVector<QVector<bool>> visited;
     QPoint studentPosition; // 对象位置
     QPoint currentDirection;
+    void moveStudent();
     void drawStudent(QPainter &painter);
     bool isValidPosition(const QPoint &pos);
-    bool trailEnabled;
-    QVector<QPoint> trail;
-    void clearTrail();
     int moveDx;
     int moveDy;
+
+    void checkWinOrLose();
 };
 
 #endif // FORM1_H

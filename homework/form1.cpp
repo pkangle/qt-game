@@ -12,8 +12,6 @@ Form1::Form1(QWidget *parent) :
     currentPosition(0),
     moveSpeed(100),
     StudentSpeed(100),
-    trailEnabled(true),
-    trail(),
     studentPosition(1,0)
 {
     ui->setupUi(this);
@@ -157,23 +155,17 @@ void Form1::keyReleaseEvent(QKeyEvent *event)
 void Form1::moveStudent()
 {
     QPoint newPos = studentPosition + currentDirection;
+
     if (isValidPosition(newPos)) {
         studentPosition = newPos;
-        if (!isValidPosition(studentPosition)) {
-            clearTrail(); // 清除残影
-        }
-        else {if (trailEnabled) {
-                trail.push_back(studentPosition);
-            }
-        }
         update();
     } else {
-        StudentTimer->stop(); // 如果碰到墙停止定时器
+        StudentTimer->stop(); // 碰到墙，停止计时器
     }
 }
+
 bool Form1::isValidPosition(const QPoint &pos)
 {
-
 
     if (mazeData[pos.y()][pos.x()] == 0 || pos.y() > 19 || pos.y() < 0 || pos.x() > 19 || pos.x() < 0) {
         return false;
@@ -182,24 +174,14 @@ bool Form1::isValidPosition(const QPoint &pos)
 
 }
 
-
 void Form1::drawStudent(QPainter &painter)
 {
     painter.setPen(Qt::blue);
     painter.setFont(QFont("Arial", 10));
-    //绘制残影
-    if (trailEnabled) {
-        for (int i = 0; i < trail.size(); ++i) {
-            QPoint pos = trail.at(i);
-            painter.drawText(pos.x() * cellSize, pos.y() * cellSize, cellSize, cellSize, Qt::AlignCenter, "分工");
-        }
-    }
-
-    // 绘制当前位置
     painter.drawText(studentPosition.x() * cellSize, studentPosition.y() * cellSize, cellSize, cellSize, Qt::AlignCenter, "分工");
 }
-void Form1::clearTrail()
+
+void Form1::checkWinOrLose()
 {
-    trail.clear();
-    update();
+
 }
