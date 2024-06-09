@@ -1,13 +1,13 @@
 #ifndef FORM2_H
 #define FORM2_H
 
-
 #include <QWidget>
 #include<QTimer>
 #include<QPaintEvent>
 #include<QVector>
 #include<QStack>
 #include<QPoint>
+#include<QKeyEvent>
 
 namespace Ui {
 class Form2;
@@ -23,25 +23,34 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+    int mazeData[15][15] = {
 
-private slots:
-    void moveObject_2();
+    };
 
 private:
     Ui::Form2 *ui;
-    QTimer *moveTimer;
-
-    static const int N = 20; // 迷宫大小
-    int mazeData[N][N];
+    QTimer *player1Timer;
+    QTimer *player2Timer;
+    //迷宫相关
+    static const int N = 15; // 迷宫大小
     int cellSize = 20;
-    QVector<QPoint> route; // 对象路线
-    int currentPosition; // 当前位置索引
-    int moveSpeed; // 移动速度，单位为毫秒
-    void getObjectRoute();
-    void dfs(int x, int y, QStack<QPoint> &path);
-    void setupRoute(const QVector<QPoint> &solutionRoute);
-    void drawObject(QPainter &painter);
     void drawMaze(QPainter &painter);
+    //玩家相关
+    int player1Speed;
+    int player2Speed;
+    void movePlayer1;
+    void movePlayer2;
+    void drawPlayer1(QPainter &painter);
+    void drawPlayer2(QPainter &painter);
+    bool isVaLid(const QPoint &pos);
+    int moveDx1,moveDy1;
+    int moveDx2,moveDy2;
+    QPoint player1Position,player2Position;
+    QPoint currentDirection1,currentDirection2;
+
+    void checkWinOrLose();
 };
 
 #endif // FORM2_H

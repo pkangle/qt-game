@@ -58,7 +58,6 @@ private:
     QTimer *StudentTimer;
 
     static const int N = 20; // 迷宫大小
-   // int mazeData[N][N];
     int cellSize = 20;
     QVector<QPoint> route; // 对象路线
     int currentPosition; // 当前位置索引
