@@ -24,9 +24,23 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
-    void keyReleaseEvent(QKeyEvent *event) override;
+    //void keyReleaseEvent(QKeyEvent *event) override;
     int mazeData[15][15] = {
-
+        {0,1,0,0,0,1,1,1,0,0,1,1,1,0,0},
+        {0,1,1,0,0,1,0,1,0,0,1,0,1,0,0},
+        {0,0,1,0,0,1,0,1,1,0,1,0,1,0,0},
+        {0,1,1,0,0,1,0,0,1,0,1,0,1,1,0},
+        {1,1,0,0,0,1,0,1,1,0,1,0,0,1,0},
+        {1,0,0,0,1,1,0,1,0,1,1,0,1,1,0},
+        {1,1,1,0,1,0,0,1,0,1,0,0,1,0,0},
+        {0,0,1,0,1,1,0,1,0,1,1,0,1,0,0},
+        {0,0,1,0,0,1,0,1,0,0,1,0,1,1,1},
+        {0,1,1,0,1,1,0,1,0,1,1,0,0,0,1},
+        {0,1,0,0,1,0,1,1,0,1,0,0,0,1,1},
+        {0,1,1,0,1,0,1,0,0,1,0,0,1,1,0},
+        {0,0,1,0,1,0,1,1,0,1,0,0,1,0,0},
+        {0,0,1,0,1,0,0,1,0,1,0,0,1,1,0},
+        {0,0,1,1,1,0,0,1,1,1,0,0,0,1,0}
     };
 
 private:
@@ -37,14 +51,15 @@ private:
     static const int N = 15; // 迷宫大小
     int cellSize = 20;
     void drawMaze(QPainter &painter);
+    QPoint centerPosition = QPoint(7,7);
     //玩家相关
     int player1Speed;
     int player2Speed;
-    void movePlayer1;
-    void movePlayer2;
+    void movePlayer1();
+    void movePlayer2();
     void drawPlayer1(QPainter &painter);
     void drawPlayer2(QPainter &painter);
-    bool isVaLid(const QPoint &pos);
+    bool isValid(const QPoint &pos);
     int moveDx1,moveDy1;
     int moveDx2,moveDy2;
     QPoint player1Position,player2Position;
