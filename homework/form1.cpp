@@ -47,7 +47,7 @@ void Form1::paintEvent(QPaintEvent *event)
     // 绘制迷宫和对象
     drawMaze(painter);
     drawObject(painter);
-    int mazeData[20][20];
+    int mazeData[15][15];
     //绘制操控对象
     drawStudent(painter);
 
@@ -55,15 +55,9 @@ void Form1::paintEvent(QPaintEvent *event)
 
 void Form1::getObjectRoute()
 {
-    route = {{1,0}, {1,1},{1,2},{1,3},{1,4},{1,5},{1,6},{1,7},{1,8},{2,8},{3,8},{3,9},{3,10},{2,10},{1,10},{1,11},{1,12},{1,13},{1,14},
-            {1,15},{2,15},{2,16},{2,17},{2,18},{2,19},{3,19},
-            {4,19},{4,18},{4,17},{4,16},{5,16},{6,16},{6,15},{6,14},{5,14},{4,14},{4,13},{4,12},{5,12},{5,11},{5,10},{5,9},{5,8},{5,7},
-            {5,6},{4,6},{3,6},{3,5},{3,3},{3,2},{3,1},{3,0},{4,0},{5,0},
-            {5,1},{5,2},{5,3},{5,4},{6,4},{7,4},{7,5},{7,6},{7,7},{8,7},{9,7},{9,8},{9,9},{8,9},{7,9},{7,10},{7,11},{7,12},{8,12},{8,13},
-            {8,14},{8,15},{8,16},{8,17},{8,18},{8,19},{9,19},{10,19},
-            {10,18},{10,17},{10,16},{10,15},{10,14},{10,13},{10,12},{10,11},{11,11},{11,10},{11,9},{11,8},{11,7},{11,6},{11,5},{10,5},
-            {9,5},{9,4},{9,3},{9,2},{10,2},{10,1},{10,0},{11,0},{12,0},
-            {12,1},{12,2},{12,3},{12,4}};
+    route = {
+        {4,0},{5,0},{6,0},{7,0},{7,1},{7,2},{8,2},{8,3},{8,4},{9,4},{9,5},{9,6},{8,6},{7,6},{7,7},{7,8},{8,8},{8,9}
+    };
 }
 
 
@@ -91,11 +85,11 @@ void Form1::drawMaze(QPainter &painter)
     }
 
     QFont font2;
-    font2.setPixelSize(15);
+    font2.setPixelSize(10);
     painter.setFont(font2);
 
     painter.setPen(Qt::red);
-    painter.drawText(360,400,"摆烂");
+    painter.drawText(260,290,"摆烂");
 }
 
 void Form1::drawObject(QPainter &painter)
@@ -156,18 +150,18 @@ void Form1::moveStudent()
 {
     QPoint newPos = studentPosition + currentDirection;
 
-    if (isValidPosition(newPos)) {
+    if (!(isValidPosition(newPos))) {
+        StudentTimer->stop();
+    } else {
         studentPosition = newPos;
         update();
-    } else {
-        StudentTimer->stop(); // 碰到墙，停止计时器
     }
 }
 
 bool Form1::isValidPosition(const QPoint &pos)
 {
 
-    if (mazeData[pos.y()][pos.x()] == 0 || pos.y() > 19 || pos.y() < 0 || pos.x() > 19 || pos.x() < 0) {
+    if (mazeData[pos.y()][pos.x()] == 0 || pos.y() > 14 || pos.y() < 0 || pos.x() > 14 || pos.x() < 0) {
         return false;
     }
     return true;

@@ -45,7 +45,7 @@ void Form3::paintEvent(QPaintEvent *event)
     // 绘制迷宫和对象
     drawMaze(painter);
     drawObject(painter);
-    int mazeData[20][20];
+    int mazeData[15][15];
     //绘制操控对象
     drawStudent(painter);
 
@@ -96,7 +96,7 @@ void Form3::drawObject(QPainter &painter)
     QFont font3;
     font3.setPixelSize(10);
     painter.setFont(font3);
-    painter.drawText(pos.x() *cellSize, pos.y() *cellSize, cellSize, cellSize, Qt::AlignCenter, "组员");
+    painter.drawText(pos.x() *cellSize, pos.y() *cellSize, cellSize, cellSize, Qt::AlignCenter, "ddl");
     currentPosition++;
 }
 
@@ -149,7 +149,7 @@ void Form3::moveStudent()
 bool Form3::isValidPosition(const QPoint &pos)
 {
 
-    if (mazeData[pos.y()][pos.x()] == 0 || pos.y() > 19 || pos.y() < 0 || pos.x() > 19 || pos.x() < 0) {
+    if (mazeData[pos.y()][pos.x()] == 0 || pos.y() > 14 || pos.y() < 0 || pos.x() > 14 || pos.x() < 0) {
         return false;
     }
     return true;
