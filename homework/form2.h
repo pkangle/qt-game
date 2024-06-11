@@ -24,7 +24,6 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
-    //void keyReleaseEvent(QKeyEvent *event) override;
     int mazeData[15][15] = {
         {0,1,0,0,0,1,1,1,0,0,1,1,1,0,0},
         {0,1,1,0,0,1,0,1,0,0,1,0,1,0,0},
