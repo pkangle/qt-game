@@ -11,7 +11,7 @@ Form1::Form1(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Form1),
     currentPosition(0),
-    moveSpeed(5000),
+    moveSpeed(2000),
     StudentSpeed(200),
     studentPosition(1,0),
     gameEnded1(false),
@@ -133,8 +133,9 @@ void Form1::moveObject()
         moveTimer->stop(); // 路线走完，停止定时器
     }
 
-    checkWinOrLose();
     update();
+    checkWinOrLose();
+
 }
 
 void Form1::keyPressEvent(QKeyEvent *event)

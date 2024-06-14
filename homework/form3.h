@@ -68,6 +68,9 @@ private:
     QVector<QPoint> route;
     void getObjectRoute();
 
+    bool gameEnd1;
+    bool gameEnd2;
+    bool gameEnd3;
     void checkWinOrLose();
 
     Ui::Form3 *ui;

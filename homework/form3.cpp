@@ -4,14 +4,18 @@
 #include <QPainter>
 #include <QTimer>
 #include <QStack>
+#include <QMessageBox>
 
 Form3::Form3(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Form3),
-    moveSpeed(100),
+    moveSpeed(200),
     currentPosition(0),
     StudentSpeed(100),
-    studentPosition(1,0)
+    studentPosition(5,1),
+    gameEnd1(false),
+    gameEnd2(false),
+    gameEnd3(false)
 {
     ui->setupUi(this);
     QFont font;
@@ -19,7 +23,7 @@ Form3::Form3(QWidget *parent) :
     // 创建定时器，控制对象移动速度
     moveTimer = new QTimer(this);
     connect(moveTimer, &QTimer::timeout, this, &Form3::moveObject);
-    moveTimer->start(moveSpeed);
+    //moveTimer->start(moveSpeed);
 
     //操作对象计时器
     StudentTimer = new QTimer(this);
@@ -88,11 +92,11 @@ void Form3::drawMaze(QPainter &painter)
     }
 
     QFont font2;
-    font2.setPixelSize(15);
+    font2.setPixelSize(10);
     painter.setFont(font2);
 
     painter.setPen(Qt::red);
-    painter.drawText(360,400,"完成");
+    painter.drawText(260,290,"完成");
 }
 
 void Form3::drawObject(QPainter &painter)
@@ -105,6 +109,18 @@ void Form3::drawObject(QPainter &painter)
     font3.setPixelSize(10);
     painter.setFont(font3);
     painter.drawText(pos.x() *cellSize, pos.y() *cellSize, cellSize, cellSize, Qt::AlignCenter, "ddl");
+
+    if (pos == studentPosition){
+        gameEnd1 = true;
+        StudentTimer->stop();
+        moveTimer->stop();
+    }
+
+    if (pos == QPoint(13,14)){
+        gameEnd2 = true;
+        moveTimer->stop();
+        StudentTimer->stop();
+    }
     currentPosition++;
 }
 
@@ -115,6 +131,7 @@ void Form3::moveObject()
         moveTimer->stop(); // 路线走完，停止定时器
     }
     update();
+    checkWinOrLose();
 }
 
 void Form3::keyPressEvent(QKeyEvent *event)
@@ -152,6 +169,17 @@ void Form3::moveStudent()
     } else {
         StudentTimer->stop(); // 碰到墙，停止计时器
     }
+
+    if (studentPosition == QPoint(5,0))
+        moveTimer->start(moveSpeed);
+
+    if (studentPosition == QPoint(13,14)){
+        gameEnd3 = true;
+        moveTimer->stop();
+        StudentTimer->stop();
+    }
+
+    checkWinOrLose();
 }
 
 bool Form3::isValidPosition(const QPoint &pos)
@@ -168,7 +196,19 @@ void Form3::drawStudent(QPainter &painter)
 {
     painter.setPen(Qt::blue);
     painter.setFont(QFont("Arial", 10));
-    painter.drawText(studentPosition.x() * cellSize, studentPosition.y() * cellSize, cellSize, cellSize, Qt::AlignCenter, "ddl");
+    painter.drawText(studentPosition.x() * cellSize, studentPosition.y() * cellSize, cellSize, cellSize, Qt::AlignCenter, "大学生");
 }
 
+void Form3::checkWinOrLose()
+{
+    if(gameEnd1){
+        QMessageBox::information(this,"游戏结束","你被ddl赶上了");
+    }
+    if(gameEnd2){
+        QMessageBox::information(this,"游戏结束","你忘记了ddl");
+    }
+    if(gameEnd3){
+        QMessageBox::information(this,"游戏结束","你完成了ddl");
+    }
+}
 
