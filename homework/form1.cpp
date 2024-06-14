@@ -5,14 +5,17 @@
 #include <QStack>
 #include <QDebug>
 #include <QVector>
+#include <QMessageBox>
 
 Form1::Form1(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Form1),
     currentPosition(0),
-    moveSpeed(100),
-    StudentSpeed(100),
-    studentPosition(1,0)
+    moveSpeed(5000),
+    StudentSpeed(200),
+    studentPosition(1,0),
+    gameEnded1(false),
+    gameEnded2(false)
 {
     ui->setupUi(this);
     QFont font;
@@ -56,7 +59,12 @@ void Form1::paintEvent(QPaintEvent *event)
 void Form1::getObjectRoute()
 {
     route = {
-        {4,0},{5,0},{6,0},{7,0},{7,1},{7,2},{8,2},{8,3},{8,4},{9,4},{9,5},{9,6},{8,6},{7,6},{7,7},{7,8},{8,8},{8,9}
+        {2,14},{3,14},{4,14},{4,13},{4,12},{4,11},{4,10},{5,10},{5,9},{5,8},{5,7},{4,7},{4,6},{4,5},{4,4},{5,4},{5,3},{5,2},{4,2},{4,1},
+        {4,0},{5,0},{6,0},{7,0},{7,1},{7,2},{8,2},{8,3},{8,4},{9,4},{9,5},{9,6},{8,6},{7,6},{7,7},{7,8},{8,8},{8,9},{8,10},
+        {7,10},{7,11},{6,11},{6,12},{6,13},{7,13},{7,14},{8,14},{9,14},{10,14},{11,14},
+        {11,13},{11,12},{10,12},{10,11},{10,10},{10,9},{11,9},{11,8},{11,7},{11,6},{11,5},{11,4},{11,3},{10,3},{10,1},{10,0},
+        {11,0},{12,0},{13,0},
+        {13,1},{13,2},{14,2},{14,3},{14,4},{13,4},{13,5},{13,6},{13,7},{14,7},{14,8},{14,9},{14,10},{13,10},{13,11},{13,12},{13,13},{13,14}
     };
 }
 
@@ -102,6 +110,19 @@ void Form1::drawObject(QPainter &painter)
     font3.setPixelSize(10);
     painter.setFont(font3);
     painter.drawText(pos.x() *cellSize, pos.y() *cellSize, cellSize, cellSize, Qt::AlignCenter, "组员");
+
+
+    if (pos == studentPosition) {
+        gameEnded1 = true;
+        moveTimer->stop();
+        StudentTimer->stop();
+    }
+
+    if (pos == QPoint(13,14)){
+        gameEnded2 = true;
+        moveTimer->stop();
+        StudentTimer->stop();
+    }
     currentPosition++;
 }
 
@@ -111,6 +132,8 @@ void Form1::moveObject()
     if (currentPosition >= route.size()) {
         moveTimer->stop(); // 路线走完，停止定时器
     }
+
+    checkWinOrLose();
     update();
 }
 
@@ -142,7 +165,7 @@ void Form1::keyPressEvent(QKeyEvent *event)
 void Form1::keyReleaseEvent(QKeyEvent *event)
 {
     Q_UNUSED(event);
-    StudentTimer->stop(); // 停止键盘计时器
+    //StudentTimer->stop(); // 停止键盘计时器
 }
 
 
@@ -156,6 +179,7 @@ void Form1::moveStudent()
         studentPosition = newPos;
         update();
     }
+    checkWinOrLose();
 }
 
 bool Form1::isValidPosition(const QPoint &pos)
@@ -173,9 +197,20 @@ void Form1::drawStudent(QPainter &painter)
     painter.setPen(Qt::blue);
     painter.setFont(QFont("Arial", 10));
     painter.drawText(studentPosition.x() * cellSize, studentPosition.y() * cellSize, cellSize, cellSize, Qt::AlignCenter, "分工");
+
+    if (studentPosition == route[currentPosition -1 ]) {
+        gameEnded1 = true;
+        moveTimer->stop();
+        StudentTimer->stop();
+    }
 }
 
 void Form1::checkWinOrLose()
 {
-
+    if(gameEnded1){
+        QMessageBox::information(this, "游戏结束", "成功让组员摆烂前分工");
+    }
+    if(gameEnded2){
+        QMessageBox::information(this, "游戏结束", "组员开始摆烂");
+    }
 }

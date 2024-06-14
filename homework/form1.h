@@ -72,6 +72,8 @@ private:
     int moveDx;
     int moveDy;
 
+    bool gameEnded1;
+    bool gameEnded2;
     void checkWinOrLose();
 };
 
